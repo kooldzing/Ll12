@@ -1,0 +1,184 @@
+﻿<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="assets/css2.css" rel="stylesheet">
+    <title>Luna Launch</title>
+
+    <link rel="stylesheet" href="assets/index-DXrY5z_5.css">
+    <link rel="stylesheet" href="assets/styles-DQqVfxH3.css">
+    <link rel="stylesheet" href="assets/Nav-BSSNAbSG.css">
+    <link rel="stylesheet" href="assets/Footer-BFSbDbyr.css">
+    <link rel="stylesheet" href="assets/PolicyPage-DaYjxvSS.css">
+    <style>
+        .nav-container .wallet-dropdown, .footer-container .wallet-dropdown { position: relative; }
+        .wallet-menu {
+            display: none; position: absolute; top: calc(100% + 8px); right: 0;
+            background: #1a1a1a; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4); z-index: 300;
+            overflow: hidden; min-width: 180px;
+        }
+        .wallet-menu.open { display: block; }
+        .wallet-menu-item { padding: 12px 20px; color: #fff; font-size: 13px; white-space: nowrap; }
+        .wallet-menu-item.disconnect { color: #ff6b6b; border-top: 1px solid #333; cursor: pointer; }
+        .wallet-menu-item.disconnect:hover { background: #2a1a1a; }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div class="nav-container">
+            <a class="logo-container" href="index.html" data-discover="true">
+                <div class="logo-img"><img alt="logo" src="assets/logo-full.svg"></div>
+            </a>
+            <nav class="main-nav">
+                <a class="nav-link" href="g1/index.html">Home</a>
+                <a class="nav-link" href="create-token.html">Create Token</a>
+                <a class="nav-link" href="liquidity-pool.html">Liquidity Pool</a>
+                <a class="nav-link" href="https://raydium.io/swap" target="_blank" rel="noopener noreferrer">Manage Liquidity</a>
+                <a class="nav-link" href="create-token.html">Support</a>
+            </nav>
+            <div class="wallet-dropdown">
+                <div class="wallet-display connect-wallet-btn">Connect Wallet</div>
+                <div class="wallet-menu" id="walletMenuNav">
+                    <div class="wallet-menu-item balance">Balance: <span id="walletBalanceNav">0</span> SOL</div>
+                    <div class="wallet-menu-item disconnect" id="logoutBtn">Log out</div>
+                </div>
+            </div>
+        </div>
+        <div id="main">
+            <div class="policy-container">
+                <h1>Privacy Policy</h1>
+                <p class="date">Effective Date: 1st March 2025</p>
+                <div class="clause">
+                    <h2>1. Introduction</h2>
+                    <p>Welcome to Luna Launch ("we," "our," or "us"). Your privacy is important to us. This Privacy
+                        Policy explains how we collect, use, and protect your personal information.</p>
+                </div>
+                <div class="clause">
+                    <h2>2. Information We Collect</h2>
+                    <p>We may collect personal information such as your name, email address, wallet address, and any
+                        other necessary details to provide our services.</p>
+                </div>
+                <div class="clause">
+                    <h2>3. How We Use Your Information</h2>
+                    <p>We use your information to process token launches, provide customer support, and comply with
+                        legal requirements.</p>
+                </div>
+                <div class="clause">
+                    <h2>4. Information Sharing</h2>
+                    <p>We do not sell, rent, or share your personal data with third parties except when required by law
+                        or to facilitate our services.</p>
+                </div>
+                <div class="clause">
+                    <h2>5. Security</h2>
+                    <p>We take reasonable measures to protect your personal information from unauthorized access and
+                        misuse.</p>
+                </div>
+                <div class="clause">
+                    <h2>6. Changes to This Policy</h2>
+                    <p>We may update this Privacy Policy from time to time. Please review it periodically for changes.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-container">
+            <a class="logo-container" href="index.html" data-discover="true">
+                <div class="logo-img"><img alt="logo" src="assets/logo-full.svg"></div>
+            </a>
+            <div class="bottom-bar" select="false">
+                <div class="copyright-bar"><span>© Luna Launch 2025</span></div>
+                <div class="policies-bar">
+                    <a class="policy-link" href="./terms-of-service.html">Terms of Service</a>
+                    <span class="separator"></span>
+                    <a aria-current="page" class="policy-link active" href="./privacy-policy.html">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="wallet-dropdown">
+                <div class="wallet-display connect-wallet-btn">Connect Wallet</div>
+                <div class="wallet-menu" id="walletMenuFooter">
+                    <div class="wallet-menu-item balance">Balance: <span id="walletBalanceFooter">0</span> SOL</div>
+                    <div class="wallet-menu-item disconnect" id="logoutBtnFooter">Log out</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var navBtn      = document.querySelector('.nav-container .connect-wallet-btn');
+            var footerBtn   = document.querySelector('.footer-container .connect-wallet-btn');
+            var menuNav     = document.getElementById('walletMenuNav');
+            var menuFooter  = document.getElementById('walletMenuFooter');
+            var balNav      = document.getElementById('walletBalanceNav');
+            var balFooter   = document.getElementById('walletBalanceFooter');
+            var logoutBtn   = document.getElementById('logoutBtn');
+            var logoutFooter= document.getElementById('logoutBtnFooter');
+            var allBtns     = [navBtn, footerBtn].filter(Boolean);
+            var allMenus    = [menuNav, menuFooter].filter(Boolean);
+            var userAddress = null;
+
+            function getProvider() {
+                if (window.phantom?.solana?.isPhantom) return window.phantom.solana;
+                if (window.solana?.isPhantom) return window.solana;
+                return null;
+            }
+            function shortAddr(a) { return a.slice(0,4)+'...'+a.slice(-6); }
+            function setBalance(t) { if(balNav) balNav.textContent=t; if(balFooter) balFooter.textContent=t; }
+            function closeMenus() { allMenus.forEach(function(m){ m.classList.remove('open'); }); }
+            function updateUI(address) {
+                userAddress = address || null;
+                var label = address ? shortAddr(address) : 'Connect Wallet';
+                allBtns.forEach(function(btn){ btn.textContent = label; });
+                if (!address) { closeMenus(); setBalance('0'); }
+            }
+            async function connectWallet() {
+                var provider = getProvider();
+                if (!provider) { if (confirm('Phantom not detected. Install?')) window.open('https://phantom.app/download','_blank'); return; }
+                try {
+                    allBtns.forEach(function(btn){ btn.textContent='Connecting...'; });
+                    localStorage.removeItem('wallet_logout');
+                    var resp = await provider.connect();
+                    if (!resp?.publicKey) throw new Error('No key');
+                    userAddress = resp.publicKey.toString();
+                    localStorage.setItem('phantom_public_key', userAddress);
+                    localStorage.setItem('phantomPublicKey', userAddress);
+                    updateUI(userAddress);
+                } catch(e) { updateUI(userAddress); }
+            }
+            async function disconnectWallet() {
+                var provider = getProvider();
+                try { if (provider?.disconnect) await provider.disconnect(); } catch(e) {}
+                localStorage.setItem('wallet_logout','1');
+                localStorage.removeItem('phantom_public_key');
+                localStorage.removeItem('phantomPublicKey');
+                localStorage.removeItem('phantomBalance');
+                updateUI(null);
+            }
+            function handleBtnClick(menu, e) {
+                if (userAddress) { allMenus.forEach(function(m){ if(m!==menu) m.classList.remove('open'); }); menu.classList.toggle('open'); e.stopPropagation(); }
+                else { connectWallet(); }
+            }
+            if (navBtn)    navBtn.addEventListener('click',    function(e){ handleBtnClick(menuNav, e); });
+            if (footerBtn) footerBtn.addEventListener('click', function(e){ handleBtnClick(menuFooter, e); });
+            if (logoutBtn)    logoutBtn.addEventListener('click',    disconnectWallet);
+            if (logoutFooter) logoutFooter.addEventListener('click', disconnectWallet);
+            document.addEventListener('click', function(e) {
+                var inside = allBtns.some(function(b){ return b&&(b===e.target||b.contains(e.target)); }) || allMenus.some(function(m){ return m&&m.contains(e.target); });
+                if (!inside) closeMenus();
+            });
+            (async function() {
+                if (localStorage.getItem('wallet_logout')) return;
+                var provider = getProvider();
+                if (provider) { try { var r=await provider.connect({onlyIfTrusted:true}); if(r?.publicKey){ userAddress=r.publicKey.toString(); updateUI(userAddress); var b=localStorage.getItem('phantomBalance'); if(b) setBalance(b); return; } } catch(e){} }
+                var saved = localStorage.getItem('phantom_public_key')||localStorage.getItem('phantomPublicKey');
+                if (saved&&/^[A-HJ-NP-Za-km-z1-9]{32,44}$/.test(saved)) { userAddress=saved; updateUI(userAddress); var b=localStorage.getItem('phantomBalance'); if(b) setBalance(b); }
+            })();
+        });
+    </script>
+</body>
+
+</html>

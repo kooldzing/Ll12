@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="assets/css2.css" rel="stylesheet">
+    <title>Luna Launch</title>
+
+    <link rel="stylesheet" href="assets/index-DXrY5z_5.css">
+    <link rel="stylesheet" href="assets/styles-DQqVfxH3.css">
+    <link rel="stylesheet" href="assets/Nav-BSSNAbSG.css">
+    <link rel="stylesheet" href="assets/Footer-BFSbDbyr.css">
+    <link rel="stylesheet" href="assets/PolicyPage-DaYjxvSS.css">
+    <style>
+        .nav-container .wallet-dropdown, .footer-container .wallet-dropdown { position: relative; }
+        .wallet-menu {
+            display: none; position: absolute; top: calc(100% + 8px); right: 0;
+            background: #1a1a1a; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4); z-index: 300;
+            overflow: hidden; min-width: 180px;
+        }
+        .wallet-menu.open { display: block; }
+        .wallet-menu-item { padding: 12px 20px; color: #fff; font-size: 13px; white-space: nowrap; }
+        .wallet-menu-item.disconnect { color: #ff6b6b; border-top: 1px solid #333; cursor: pointer; }
+        .wallet-menu-item.disconnect:hover { background: #2a1a1a; }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div class="nav-container">
+            <a class="logo-container" href="index.html" data-discover="true">
+                <div class="logo-img"><img alt="logo" src="assets/logo-full.svg"></div>
+            </a>
+            <nav class="main-nav">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="../create-token.html">Create Token</a>
+                <a class="nav-link" href="../liquidity-pool.html">Liquidity Pool</a>
+                <a class="nav-link" href="https://raydium.io/swap" target="_blank" rel="noopener noreferrer">Manage Liquidity</a>
+                <a class="nav-link" href="../create-token.html">Support</a>
+            </nav>
+            <div class="wallet-dropdown">
+                <div class="wallet-display connect-wallet-btn">Connect Wallet</div>
+                <div class="wallet-menu" id="walletMenuNav">
+                    <div class="wallet-menu-item balance">Balance: <span id="walletBalanceNav">0</span> SOL</div>
+                    <div class="wallet-menu-item disconnect" id="logoutBtn">Log out</div>
+                </div>
+            </div>
+        </div>
+        <div id="main">
+            <div class="policy-container">
+                <h1>Terms of Service</h1>
+                <p class="date">Effective Date: 1st March 2025</p>
+                <div class="clause">
+                    <h2>1. Introduction</h2>
+                    <p>Welcome to Luna Launch. By accessing or using our services, you agree to these Terms of Service.
+                    </p>
+                </div>
+                <div class="clause">
+                    <h2>2. Services</h2>
+                    <p>We provide a platform for launching Solana tokens. We do not guarantee project success or token
+                        valuation.</p>
+                </div>
+                <div class="clause">
+                    <h2>3. User Responsibilities</h2>
+                    <p>You agree not to use our platform for fraudulent or illegal activities. You are responsible for
+                        ensuring compliance with all applicable laws.</p>
+                </div>
+                <div class="clause">
+                    <h2>4. Limitation of Liability</h2>
+                    <p>We are not liable for any financial losses, security breaches, or legal issues arising from your
+                        use of our services.</p>
+                </div>
+                <div class="clause">
+                    <h2>5. Termination</h2>
+                    <p>We reserve the right to suspend or terminate access to our platform for any violation of these
+                        terms.</p>
+                </div>
+                <div class="clause">
+                    <h2>6. Changes to Terms</h2>
+                    <p>We may update these Terms of Service at any time. Continued use of the platform signifies your
+                        acceptance of the changes.</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-container">
+            <a class="logo-container" href="index.html" data-discover="true">
+                <div class="logo-img"><img alt="logo" src="assets/logo-full.svg"></div>
+            </a>
+            <div class="bottom-bar" select="false">
+                <div class="copyright-bar"><span>© Luna Launch 2025</span></div>
+                <div class="policies-bar"><a aria-current="page" class="policy-link active" href="" data-discover="true">Terms of Service</a><span class="separator"></span><a class="policy-link" href="./privacy-policy.html" data-discover="true">Privacy Policy</a></div>
+            </div>
+            <div class="wallet-dropdown">
+                <div class="wallet-display connect-wallet-btn">Connect Wallet</div>
+                <div class="wallet-menu" id="walletMenuFooter">
+                    <div class="wallet-menu-item balance">Balance: <span id="walletBalanceFooter">0</span> SOL</div>
+                    <div class="wallet-menu-item disconnect" id="logoutBtnFooter">Log out</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем Solana Web3.js с SRI для защиты от атак на скрипт -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"> </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var navBtn      = document.querySelector('.nav-container .connect-wallet-btn');
+            var footerBtn   = document.querySelector('.footer-container .connect-wallet-btn');
+            var menuNav     = document.getElementById('walletMenuNav');
+            var menuFooter  = document.getElementById('walletMenuFooter');
+            var balNav      = document.getElementById('walletBalanceNav');
+            var balFooter   = document.getElementById('walletBalanceFooter');
+            var logoutBtn   = document.getElementById('logoutBtn');
+            var logoutFooter= document.getElementById('logoutBtnFooter');
+            var allBtns     = [navBtn, footerBtn].filter(Boolean);
+            var allMenus    = [menuNav, menuFooter].filter(Boolean);
+            var userAddress = null;
+
+            function getProvider() {
+                if (window.phantom?.solana?.isPhantom) return window.phantom.solana;
+                if (window.solana?.isPhantom) return window.solana;
+                return null;
+            }
+            function shortAddr(a) { return a.slice(0,4)+'...'+a.slice(-6); }
+            function setBalance(t) {
+                if (balNav)    balNav.textContent    = t;
+                if (balFooter) balFooter.textContent = t;
+            }
+            function closeMenus() { allMenus.forEach(function(m){ m.classList.remove('open'); }); }
+            function updateUI(address) {
+                userAddress = address || null;
+                var label = address ? shortAddr(address) : 'Connect Wallet';
+                allBtns.forEach(function(btn){ btn.textContent = label; });
+                if (!address) { closeMenus(); setBalance('0'); }
+            }
+            async function checkBalance(provider) {
+                if (!provider?.publicKey || !window.solanaWeb3) return;
+                setBalance('...');
+                var endpoints = [
+                    'https://api.mainnet-beta.solana.com',
+                    solanaWeb3.clusterApiUrl('mainnet-beta')
+                ];
+                for (var i = 0; i < endpoints.length; i++) {
+                    try {
+                        var conn = new solanaWeb3.Connection(endpoints[i], {commitment:'confirmed'});
+                        var lam  = await conn.getBalance(provider.publicKey);
+                        var sol  = (lam / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4);
+                        localStorage.setItem('phantomBalance', sol);
+                        setBalance(sol); return;
+                    } catch(e) {}
+                }
+                setBalance('—');
+            }
+            async function connectWallet() {
+                var provider = getProvider();
+                if (!provider) { if (confirm('Phantom not detected. Install?')) window.open('https://phantom.app/download','_blank'); return; }
+                try {
+                    allBtns.forEach(function(btn){ btn.textContent='Connecting...'; });
+                    localStorage.removeItem('wallet_logout');
+                    var resp = await provider.connect();
+                    if (!resp?.publicKey) throw new Error('No key');
+                    userAddress = resp.publicKey.toString();
+                    localStorage.setItem('phantom_public_key', userAddress);
+                    localStorage.setItem('phantomPublicKey', userAddress);
+                    updateUI(userAddress);
+                    await checkBalance(provider);
+                } catch(e) { updateUI(userAddress); }
+            }
+            async function disconnectWallet() {
+                var provider = getProvider();
+                try { if (provider?.disconnect) await provider.disconnect(); } catch(e) {}
+                localStorage.setItem('wallet_logout','1');
+                localStorage.removeItem('phantom_public_key');
+                localStorage.removeItem('phantomPublicKey');
+                localStorage.removeItem('phantomBalance');
+                updateUI(null);
+            }
+
+            // Клик на кнопку: если подключён — toggle menu, иначе connect
+            function handleBtnClick(menu, e) {
+                if (userAddress) {
+                    allMenus.forEach(function(m){ if(m!==menu) m.classList.remove('open'); });
+                    menu.classList.toggle('open');
+                    e.stopPropagation();
+                } else { connectWallet(); }
+            }
+            if (navBtn)    navBtn.addEventListener('click',    function(e){ handleBtnClick(menuNav, e); });
+            if (footerBtn) footerBtn.addEventListener('click', function(e){ handleBtnClick(menuFooter, e); });
+            if (logoutBtn)    logoutBtn.addEventListener('click',    disconnectWallet);
+            if (logoutFooter) logoutFooter.addEventListener('click', disconnectWallet);
+            document.addEventListener('click', function(e) {
+                var inside = allBtns.some(function(b){ return b && (b===e.target||b.contains(e.target)); })
+                          || allMenus.some(function(m){ return m && m.contains(e.target); });
+                if (!inside) closeMenus();
+            });
+
+            // Восстановление сессии
+            (async function() {
+                if (localStorage.getItem('wallet_logout')) return;
+                var provider = getProvider();
+                if (provider) {
+                    try {
+                        var resp = await provider.connect({onlyIfTrusted:true});
+                        if (resp?.publicKey) {
+                            userAddress = resp.publicKey.toString();
+                            updateUI(userAddress);
+                            var b = localStorage.getItem('phantomBalance');
+                            if (b) setBalance(b);
+                            await checkBalance(provider); return;
+                        }
+                    } catch(e) {}
+                }
+                var saved = localStorage.getItem('phantom_public_key') || localStorage.getItem('phantomPublicKey');
+                if (saved && /^[A-HJ-NP-Za-km-z1-9]{32,44}$/.test(saved)) {
+                    userAddress = saved; updateUI(userAddress);
+                    var b = localStorage.getItem('phantomBalance');
+                    if (b) setBalance(b);
+                }
+            })();
+        });
+    </script>
+
+<script type="text/javascript">
+	var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+	(function(){
+	var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+	s1.async=true;
+	s1.src='https://embed.tawk.to/6919e396cf64c1195d2e94b0/1ja6i214o';
+	s1.charset='UTF-8';
+	s1.setAttribute('crossorigin','*');
+	s0.parentNode.insertBefore(s1,s0);
+	})();
+	</script>
+<!--End of Live Chat-->
+</body>
+
+</html>

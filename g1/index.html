@@ -1,0 +1,1389 @@
+﻿<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/svg+xml" href="assets/logo-full.svg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>LunaLaunch | Build a Solana Token Fast</title>
+    <meta name="description" content="Launch a custom Solana token in minutes with a simple no-code flow, wallet support, and instant deployment tools.">
+    <meta name="keywords" content="solana token launcher, create solana token, no code token creator, launch token fast, luna launch">
+
+    <link rel="stylesheet" href="assets/index-DXrY5z_5.css">
+    <link rel="stylesheet" href="assets/styles-DQqVfxH3.css">
+    <link rel="stylesheet" href="assets/Nav-BSSNAbSG.css">
+    <link rel="stylesheet" href="assets/Footer-BFSbDbyr.css">
+    <link rel="stylesheet" href="assets/Landing-BPBDyXu0.css">
+    <link rel="stylesheet" href="assets/css2.css">
+
+    <style>
+        .wallet-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 110%;
+            left: 0;
+            display: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border: 1px solid #cccccc00;
+            background: #f7f7f738;
+            border-radius: 4px;
+            border-radius: 25px;
+            width: 100%;
+        }
+
+        .wallet-dropdown .logout-btn {
+            display: none;
+        }
+
+        .wallet-dropdown.connected:hover .logout-btn {
+            display: block;
+        }
+
+        /* Live Activity Panel Styles */
+        .live-activity-panel {
+            position: fixed;
+            left: 20px;
+            top: 120px;
+            width: 280px;
+            background: rgba(10, 10, 10, 0.95);
+            border: 2px solid rgba(107, 95, 246, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        }
+
+        .stats-section {
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #6b5ff6;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .activity-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(107, 95, 246, 0.3);
+        }
+
+        .activity-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .activity-icon {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.4;
+            }
+        }
+
+        .activity-list {
+            max-height: 200px;
+            overflow: hidden;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            font-size: 12px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .activity-icon-type {
+            font-size: 16px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(107, 95, 246, 0.2);
+            border-radius: 50%;
+        }
+
+        .activity-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .activity-text {
+            color: rgba(255, 255, 255, 0.9);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .activity-token {
+            color: #6b5ff6;
+            font-weight: 600;
+        }
+
+        .activity-time {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 1200px) {
+            .live-activity-panel {
+                display: none;
+            }
+        }
+        
+        /* ===== МОБИЛЬНЫЕ СТИЛИ ===== */
+        @media (max-width: 900px) {
+            body { overflow-x: hidden; }
+            #root { overflow-x: hidden; }
+
+            /* --- HERO --- */
+            .hero-section {
+                padding: 2rem 1.2rem 0 1.2rem;
+                min-height: auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                position: relative;
+                overflow: hidden;
+            }
+
+            /* Земля — фон снизу, не мешает тексту */
+            .background-1 {
+                position: relative !important;
+                width: 100% !important;
+                height: auto !important;
+                top: auto !important;
+                left: auto !important;
+                transform: none !important;
+                opacity: 1;
+                z-index: 1;
+                margin-top: -2rem;
+                pointer-events: none;
+            }
+
+            .background-1 img {
+                width: 100%;
+                height: auto;
+                object-fit: cover;
+                display: block;
+            }
+
+            /* Телефон — скрываем, он только мешает */
+            .background-2 {
+                display: none !important;
+            }
+
+            /* --- TITLE BOX --- */
+            #landing .title-box {
+                margin-top: 1rem !important;
+                z-index: 5;
+                position: relative;
+                text-align: center;
+                width: 100%;
+                padding: 0 0.5rem;
+                gap: 1rem !important;
+            }
+
+            .title-1 {
+                font-size: 0.8rem !important;
+                margin-bottom: 0;
+            }
+
+            .title-2 {
+                line-height: 1.2;
+            }
+
+            .title-2 .span-1 {
+                font-size: 1.55rem !important;
+                display: block;
+            }
+
+            .title-2 .span-2 {
+                font-size: 1.3rem !important;
+                display: block;
+            }
+
+            .desc {
+                font-size: 0.85rem !important;
+                line-height: 1.5;
+                margin-bottom: 0;
+            }
+
+            .desc .span-1,
+            .desc .span-2 {
+                display: block;
+            }
+
+            /* --- CREATE TOKEN BOX --- */
+            #landing .title-box .create-token-box {
+                flex-direction: column !important;
+                gap: 0.6rem !important;
+                border: none !important;
+                background: none !important;
+                padding: 0 !important;
+                border-radius: 0 !important;
+                width: 100%;
+            }
+
+            #landing .title-box .create-token-box .create-token-text {
+                width: 100%;
+                padding: 0.9rem 1.2rem;
+                font-size: 1rem;
+                border-radius: 14px;
+                background: rgba(255,255,255,0.08) !important;
+                border: 1px solid rgba(255,255,255,0.2);
+                color: #fff;
+                margin-left: 0 !important;
+                box-sizing: border-box;
+            }
+
+            #landing .title-box .create-token-box .create-token-btn {
+                width: 100%;
+                justify-content: center !important;
+                padding: 0.9rem 1.2rem !important;
+                font-size: 1rem;
+                border-radius: 14px !important;
+                background: #fff !important;
+                color: #000 !important;
+                font-weight: 700;
+                box-sizing: border-box;
+            }
+
+            /* --- CONTENT SECTIONS --- */
+            #landing .content-container {
+                padding: 2rem 1rem;
+                gap: 3rem;
+                border-radius: 20px 20px 0 0;
+            }
+
+            #landing .content-container .content-section {
+                width: 100%;
+            }
+
+            #landing .content-container .content-text-1 {
+                font-size: 1.5rem !important;
+                text-align: center;
+                line-height: 1.3;
+            }
+
+            #landing .content-img-1 {
+                width: 100%;
+                border-radius: 16px 16px 0 0;
+            }
+
+            #landing .content-img-1 img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+
+            /* --- PHONE PARALLAX --- */
+            #landing .phone-parallax-section {
+                padding: 2rem 1rem;
+                overflow: visible;
+            }
+
+            #landing .phone-parallax-section .parallax-title {
+                width: 100%;
+                font-size: 1.2rem !important;
+                text-align: center;
+            }
+
+            #landing .phone-parallax-section .img-container {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 260px;
+                position: relative;
+            }
+
+            #landing .phone-parallax-section .img-container .iphone-img {
+                height: 260px !important;
+                z-index: 2;
+            }
+
+            #landing .phone-parallax-section .img-container .iphone-img img {
+                height: 100%;
+                width: auto;
+            }
+
+            #landing .phone-parallax-section .img-container .left-img {
+                height: 55% !important;
+                left: 2% !important;
+                z-index: 3;
+            }
+
+            #landing .phone-parallax-section .img-container .right-img {
+                height: 55% !important;
+                right: 2% !important;
+                z-index: 1;
+            }
+
+            #landing .phone-parallax-section .img-container .left-img img,
+            #landing .phone-parallax-section .img-container .right-img img {
+                height: 100%;
+                width: auto;
+            }
+
+            /* --- FEATURES --- */
+            #landing .features-section {
+                width: calc(100% - 2rem);
+                padding: 1.5rem;
+                border-radius: 20px;
+                margin: 0 1rem;
+                box-sizing: border-box;
+            }
+
+            #landing .features-section .features-title {
+                width: 100%;
+                font-size: 1.3rem !important;
+            }
+
+            #landing .features-section .features-subtitle {
+                width: 100%;
+                font-size: 0.85rem !important;
+            }
+
+            #landing .features-container {
+                display: flex !important;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            #landing .features-img {
+                width: 60%;
+                max-width: 200px;
+                margin: 0 auto;
+            }
+
+            #landing .features-stats {
+                width: 100%;
+                flex-direction: row;
+                gap: 1rem;
+            }
+
+            #landing .features-stats .features-stat {
+                flex: 1;
+                padding: 1rem 0.5rem;
+                border-radius: 16px;
+            }
+
+            #landing .features-stats .features-stat:nth-child(1) {
+                transform: none !important;
+            }
+
+            #landing .features-stats .features-stat:nth-child(2) {
+                transform: none !important;
+            }
+
+            #landing .features-stats .features-stat .features-stat-value {
+                font-size: 1.8rem !important;
+            }
+
+            #landing .features-stats .features-stat .features-stat-label {
+                font-size: 0.7rem !important;
+            }
+
+            #landing .features-description {
+                width: 100%;
+                box-sizing: border-box;
+                border-radius: 16px;
+            }
+
+            #landing .features-description .features-description-text .features-description-title {
+                font-size: 1rem !important;
+            }
+
+            #landing .features-description .features-description-text .features-description-subtitle {
+                font-size: 0.85rem !important;
+            }
+
+            #landing .features-description .create-token-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 0.8rem 1rem;
+                box-sizing: border-box;
+            }
+
+            /* --- FOOTER --- */
+            .footer-container {
+                padding: 2rem 1rem;
+                flex-direction: column;
+                gap: 1rem;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .bottom-bar {
+                flex-direction: column;
+                text-align: center;
+                gap: 0.5rem;
+            }
+
+            .policies-bar {
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 0.5rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title-2 .span-1 { font-size: 1.3rem !important; }
+            .title-2 .span-2 { font-size: 1.1rem !important; }
+
+            #landing .features-stats .features-stat .features-stat-value {
+                font-size: 1.4rem !important;
+            }
+
+            #landing .features-img {
+                width: 50%;
+            }
+        }
+
+        /* ── Wallet dropdown menu ── */
+        .nav-container .wallet-dropdown,
+        .footer-container .wallet-dropdown {
+            position: relative;
+        }
+
+        .wallet-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            z-index: 300;
+            overflow: hidden;
+            min-width: 180px;
+        }
+
+        .wallet-menu.open {
+            display: block;
+        }
+
+        .wallet-menu-item {
+            padding: 12px 20px;
+            color: #fff;
+            font-size: 13px;
+            cursor: default;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+
+        .wallet-menu-item.disconnect {
+            color: #ff6b6b;
+            border-top: 1px solid #333;
+            cursor: pointer;
+        }
+
+        .wallet-menu-item.disconnect:hover {
+            background-color: #2a1a1a;
+        }
+
+        /* ══════════════════════════════════════════════
+           MODERN REDESIGN — visual enhancements
+           ══════════════════════════════════════════════ */
+
+        /* Убираем градиент с лендинга */
+        #landing {
+            background: none;
+        }
+
+        /* Свечение строго внутри хедера через псевдоэлемент */
+        .nav-container {
+            position: relative;
+        }
+        .nav-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 100% at 50% 0%, rgba(107,95,246,0.22) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Кошелёк поверх всего */
+        .nav-container .wallet-dropdown {
+            position: relative;
+            z-index: 500;
+        }
+        .wallet-menu {
+            z-index: 500 !important;
+        }
+
+        /* Badge — shimmer + gradient border */
+        #landing .title-box .title-1 {
+            background: linear-gradient(135deg, rgba(107,95,246,0.18) 0%, rgba(80,60,200,0.08) 100%);
+            border-color: rgba(107,95,246,0.45);
+            box-shadow: 0 0 20px rgba(107,95,246,0.15) inset, 0 0 12px rgba(107,95,246,0.1);
+            position: relative; overflow: hidden;
+            letter-spacing: 0.5px;
+        }
+        #landing .title-box .title-1::after {
+            content: '';
+            position: absolute; top: -50%; left: -100%;
+            width: 55%; height: 200%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+            transform: skewX(-20deg);
+            animation: badgeShimmer 3.5s ease-in-out infinite;
+        }
+        @keyframes badgeShimmer {
+            0%   { left: -100%; }
+            60%  { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        /* Заголовок span-1 — subtle gradient */
+        #landing .title-box .title-2 .span-1 {
+            background: linear-gradient(135deg, #ffffff 30%, #ccc8ff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* CTA box — glow border */
+        #landing .title-box .create-token-box {
+            border-color: rgba(107,95,246,0.35);
+            box-shadow: 0 0 35px rgba(107,95,246,0.12), 0 2px 8px rgba(0,0,0,0.3);
+            transition: box-shadow 0.4s ease, border-color 0.4s ease;
+            background: rgba(255,255,255,0.07);
+        }
+        #landing .title-box .create-token-box:focus-within {
+            border-color: rgba(107,95,246,0.7);
+            box-shadow: 0 0 50px rgba(107,95,246,0.25), 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        /* CTA button — gradient + glow */
+        #landing .title-box .create-token-box .create-token-btn {
+            background: linear-gradient(135deg, #ffffff 0%, #e2deff 100%);
+            box-shadow: 0 0 18px rgba(107,95,246,0.35), 0 3px 12px rgba(0,0,0,0.25);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        #landing .title-box .create-token-box .create-token-btn:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 32px rgba(107,95,246,0.6), 0 4px 16px rgba(0,0,0,0.3);
+        }
+
+        /* Live Activity Panel — glassmorphism */
+        .live-activity-panel {
+            background: rgba(255,255,255,0.025) !important;
+            backdrop-filter: blur(14px) !important;
+            -webkit-backdrop-filter: blur(14px) !important;
+            border: 1px solid rgba(107,95,246,0.15) !important;
+            border-radius: 20px !important;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.35), 0 0 60px rgba(107,95,246,0.06) !important;
+        }
+
+        /* Stat items — card style */
+        .stat-item {
+            background: rgba(107,95,246,0.08);
+            border: 1px solid rgba(107,95,246,0.18);
+            border-radius: 14px;
+            padding: 0.8rem 1.2rem;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        .stat-item:hover {
+            background: rgba(107,95,246,0.15);
+            transform: translateY(-3px);
+        }
+        .stat-number {
+            font-size: 1.6rem !important;
+            font-weight: 800 !important;
+            background: linear-gradient(135deg, #fff 0%, #a89aff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label {
+            color: rgba(255,255,255,0.55) !important;
+            font-size: 0.78rem !important;
+            letter-spacing: 0.3px;
+        }
+
+        /* Activity items */
+        .activity-item {
+            border-radius: 10px !important;
+            transition: background 0.2s ease;
+        }
+        .activity-item:hover {
+            background: rgba(107,95,246,0.1) !important;
+        }
+
+        /* Content section heading */
+        #landing .content-container .content-text-1 .span-2 {
+            background: linear-gradient(90deg, #fff 0%, #6b5ff6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Features section */
+        #landing .features-section {
+            border-color: rgba(107,95,246,0.2) !important;
+            background: linear-gradient(135deg, #0f0e13 0%, #120f1e 100%) !important;
+            box-shadow: 0 0 60px rgba(107,95,246,0.08) !important;
+        }
+        #landing .features-section .features-label {
+            background: rgba(107,95,246,0.15) !important;
+            border-color: rgba(107,95,246,0.35) !important;
+            color: #b8b0ff;
+        }
+        #landing .features-stats .features-stat:nth-child(1) {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        #landing .features-stats .features-stat:nth-child(2) {
+            box-shadow: 0 4px 20px rgba(107,95,246,0.4);
+        }
+
+        /* Features CTA button */
+        #landing .features-description .create-token-btn {
+            background: linear-gradient(135deg, #1e1b3a 0%, #0d0c13 100%) !important;
+            border: 1px solid rgba(107,95,246,0.35) !important;
+            transition: all 0.3s ease !important;
+        }
+        #landing .features-description .create-token-btn:hover {
+            background: linear-gradient(135deg, #6b5ff6 0%, #4a3fb5 100%) !important;
+            border-color: rgba(107,95,246,0.7) !important;
+            box-shadow: 0 4px 20px rgba(107,95,246,0.45) !important;
+        }
+
+        /* Parallax title */
+        #landing .phone-parallax-section .parallax-title {
+            background: linear-gradient(135deg, #fff 20%, #9b8eff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Coin groups — гарантированная видимость на десктопе */
+        #landing .phone-parallax-section .img-container {
+            overflow: visible !important;
+            position: relative;
+        }
+        #landing .phone-parallax-section .img-container .left-img,
+        #landing .phone-parallax-section .img-container .right-img {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* ── Жёсткое скрытие мобильного дровера на десктопе ── */
+        #mobileNavDrawer,
+        #mobileNavOverlay {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+        @media (max-width: 900px) {
+            #mobileNavDrawer {
+                display: flex !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+            #mobileNavOverlay.open {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+            }
+        }
+
+        /* ── Навигация строго по центру навбара ── */
+        @media (min-width: 901px) {
+            .nav-container {
+                display: grid !important;
+                grid-template-columns: 1fr auto 1fr !important;
+                grid-template-areas: "logo nav wallet" !important;
+                align-items: center !important;
+            }
+            .nav-container .logo-container {
+                grid-area: logo !important;
+            }
+            .nav-container .main-nav {
+                grid-area: nav !important;
+                position: static !important;
+                transform: none !important;
+            }
+            .nav-container .wallet-dropdown {
+                grid-area: wallet !important;
+                justify-self: end !important;
+                width: auto !important;
+            }
+            .nav-container .hamburger-btn {
+                display: none !important;
+            }
+        }
+
+    </style>
+
+
+    
+
+
+
+
+</head>
+
+<body>
+    <div id="root">
+        <div class="nav-container">
+            <a aria-current="page" class="logo-container active" href="../index.html" data-discover="true">
+                <div class="logo-img"><img alt="logo" src="assets/logo-full.svg"></div>
+            </a>
+            <nav class="main-nav">
+                <a aria-current="page" class="nav-link active" href="../index.html" data-discover="true">Home</a>
+                <a class="nav-link" href="../create-token.html" data-discover="true">Create Token</a>
+                <a href="../liquidity-pool.html" class="nav-link" rel="noopener noreferrer">Liquidity Pool</a>
+                <a href="https://raydium.io/swap" class="nav-link" rel="noopener noreferrer" target="_blank">Manage Liquidity</a>
+                <a class="nav-link" href="../create-token.html" data-discover="true">Support</a>
+            </nav>
+            <div class="wallet-dropdown">
+                <div class="wallet-display connect-wallet-btn">Connect Wallet</div>
+                <div class="wallet-menu" id="walletMenuNav">
+                    <div class="wallet-menu-item balance">Balance: <span id="walletBalanceNav">0</span> SOL</div>
+                    <div class="wallet-menu-item disconnect" id="logoutBtn">Log out</div>
+                </div>
+            </div>
+            <button class="hamburger-btn" id="hamburgerBtn" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+
+        <!-- Mobile nav overlay -->
+        <div class="mobile-nav-overlay" id="mobileNavOverlay"></div>
+
+        <!-- Mobile nav drawer -->
+        <div class="mobile-nav-drawer" id="mobileNavDrawer">
+            <div class="mobile-nav-close" id="mobileNavClose">✕</div>
+            <a class="nav-link" href="../index.html" style="color:#fff!important;text-decoration:none!important;">Home</a>
+            <a class="nav-link" href="../create-token.html" style="color:#fff!important;text-decoration:none!important;">Create Token</a>
+            <a class="nav-link" href="../liquidity-pool.html" style="color:#fff!important;text-decoration:none!important;">Liquidity Pool</a>
+            <a class="nav-link" href="https://raydium.io/swap" target="_blank" style="color:#fff!important;text-decoration:none!important;">Manage Liquidity</a>
+            <a class="nav-link" href="../create-token.html" style="color:#fff!important;text-decoration:none!important;">Support</a>
+            <div class="mobile-wallet-btn" id="mobileWalletBtn">Connect Wallet</div>
+        </div>
+        <div id="main">
+            <div id="landing" style="opacity: 1;">
+                <div class="hero-section">
+                    <div class="title-box">
+                        <span class="title-1">Solana Token Launcher</span>
+                        <div class="title-2">
+                            <span class="span-1">Create your own <span style="font-weight: 900;">Solana</span> token</span>
+                            <span class="span-2">
+                                <span style="font-weight: 700;">From idea</span>
+                                <span style="font-weight: 500;">to live market</span>
+                                <span style="font-weight: 900;">in minutes</span>
+                            </span>
+                        </div>
+                        <div class="desc">
+                            <span class="span-1">Create and deploy your Solana coin effortlessly in seconds.</span>
+                            <span class="span-2">NoLimit</span>
+                        </div>
+                        <div class="create-token-box">
+                            <input class="create-token-text" placeholder="Create your first token" value="">
+                            <div class="create-token-btn" style="cursor: pointer;">
+                                <span class="text">Create Solana Token</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="background-1" style="transform: translateY(5%);">
+                        <img alt="Earth Background" src="assets/bg1-DWJ0RCfe.png">
+                    </div>
+                    <div class="background-2">
+                        <img alt="iPhone Screenshot" src="assets/iPhoneSS-DpoVylXb.png">
+                    </div>
+                </div>
+                
+                <!-- Live Activity Panel -->
+                <div class="live-activity-panel">
+                    <div class="stats-section">
+                        <div class="stat-item">
+                            <div class="stat-number">50,000+</div>
+                            <div class="stat-label">Tokens Created</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">25,000+</div>
+                            <div class="stat-label">Active Users</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">99.9%</div>
+                            <div class="stat-label">Success Rate</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-section">
+                        <div class="activity-header">
+                            <span class="activity-icon">🟢</span>
+                            <span class="activity-title">Live Activity</span>
+                        </div>
+                        <div class="activity-list" id="activityList">
+                            <!-- Activity items will be dynamically generated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-container">
+                    <div class="content-section">
+                        <div class="content-text-1">
+                            <span class="span-1">A complete toolkit for</span>
+                            <span class="span-2">launching on Solana.</span>
+                        </div>
+                        <div class="content-img-1">
+                            <div class="content-controls">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <div class="border-bg"></div>
+                            <img src="assets/contentimg1-d6m7sRFw.png">
+                            <div class="fade-fg"></div>
+                        </div>
+                    </div>
+                    <div class="phone-parallax-section">
+                        <div class="parallax-title">Everything you need to launch, manage, and scale your token</div>
+                        <div class="img-container">
+                            <img class="left-img" style="transform: translateY(-10%);" src="assets/coinGroup1-R48YoBp5.png">
+                            <img class="iphone-img" src="assets/iPhone%20Image-pZbQWzRq.png">
+                            <img class="right-img" style="transform: translateY(-10%);" src="assets/coinGroup2-Bkx6Q6TB.png">
+                        </div>
+                    </div>
+                    <div class="features-section">
+                        <div class="features-label">Why LunaLaunch</div>
+                        <div class="features-title">Powerful launch tools with a clean, beginner-friendly flow</div>
+                        <div class="features-subtitle">From token setup to live deployment: fast steps, secure wallet flow,
+                            and no technical barrier.</div>
+                        <div class="features-container">
+                            <div class="features-img">
+                                <img src="assets/iPhone%20Image-pZbQWzRq.png">
+                            </div>
+                            <div class="features-stats">
+                                <div class="features-stat">
+                                    <div class="features-stat-value">99.9%</div>
+                                    <div class="features-stat-label">Launch Success</div>
+                                </div>
+                                <div class="features-stat">
+                                    <div class="features-stat-value">85%+</div>
+                                    <div class="features-stat-label">Users Who Launch Again</div>
+                                </div>
+                            </div>
+                            <div class="features-description">
+                                <div class="features-description-text">
+                                    <div class="features-description-title">Configure Once, Launch in Minutes
+                                    </div>
+                                    <div class="features-description-subtitle">Choose parameters, connect your wallet,
+                                        and publish your token with a streamlined process designed for speed and
+                                        reliability.</div>
+                                </div>
+
+                                <div class="create-token-btn" style="cursor: pointer;">
+
+                                    <span class="text">Create Token</span>
+
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-container">
+            <a aria-current="page" class="logo-container active" href="../index.html" data-discover="true">
+                <div class="logo-img"><img alt="logo" src="assets/logo-full.svg"></div>
+            </a>
+            <div class="bottom-bar" select="false">
+                <div class="copyright-bar">
+                    <span>© lunastarter 2025</span>
+                </div>
+                <div class="policies-bar">
+                    <a class="policy-link" href="terms-of-service.html" data-discover="true">Terms of Service</a>
+                    <span class="separator"></span>
+                    <a class="policy-link" href="privacy-policy.html" data-discover="true">Privacy Policy</a>
+                </div>
+            </div>
+            <div class="wallet-dropdown">
+                <div class="wallet-display connect-wallet-btn" style="display: none;">Connect Wallet</div>
+                <div class="wallet-menu" id="walletMenuFooter">
+                    <div class="wallet-menu-item balance">Balance: <span id="walletBalanceFooter">0</span> SOL</div>
+                    <div class="wallet-menu-item disconnect" id="logoutBtnFooter">Log out</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Подключаем Solana Web3.js с SRI для защиты от атак на скрипт -->
+    <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.js"> </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── Элементы UI ──────────────────────────────────────────────
+            const navConnectBtn     = document.querySelector('.nav-container .connect-wallet-btn');
+            const footerConnectBtn  = document.querySelector('.footer-container .connect-wallet-btn');
+            const mobileWalletBtn   = document.getElementById('mobileWalletBtn');
+            const logoutBtn         = document.getElementById('logoutBtn');
+            const logoutBtnFooter   = document.getElementById('logoutBtnFooter');
+            const walletMenuNav     = document.getElementById('walletMenuNav');
+            const walletMenuFooter  = document.getElementById('walletMenuFooter');
+            const balanceNavEl      = document.getElementById('walletBalanceNav');
+            const balanceFooterEl   = document.getElementById('walletBalanceFooter');
+
+            // Показываем кнопку кошелька в футере
+            if (footerConnectBtn) footerConnectBtn.style.display = 'inline-block';
+
+            let userAddress = null;
+
+            // ── Получение провайдера Phantom ─────────────────────────────
+            function getProvider() {
+                if (window.phantom?.solana?.isPhantom) return window.phantom.solana;
+                if (window.solana?.isPhantom)           return window.solana;
+                if (window.ethereum?.isPhantom)         return window.ethereum;
+                return null;
+            }
+
+            // ── Короткий адрес ───────────────────────────────────────────
+            function shortAddr(address) {
+                return address.slice(0, 4) + '...' + address.slice(-6);
+            }
+
+            // ── Закрыть все menus ────────────────────────────────────────
+            function closeMenus() {
+                if (walletMenuNav)    walletMenuNav.classList.remove('open');
+                if (walletMenuFooter) walletMenuFooter.classList.remove('open');
+            }
+
+            // ── Обновить баланс в UI ─────────────────────────────────────
+            function setBalanceText(text) {
+                if (balanceNavEl)    balanceNavEl.textContent = text;
+                if (balanceFooterEl) balanceFooterEl.textContent = text;
+            }
+
+            // ── Обновить UI всех кнопок ──────────────────────────────────
+            function updateUI(address) {
+                const label = address ? shortAddr(address) : 'Connect Wallet';
+                [navConnectBtn, footerConnectBtn, mobileWalletBtn].forEach(function (btn) {
+                    if (btn) btn.textContent = label;
+                });
+                if (!address) {
+                    closeMenus();
+                    setBalanceText('0');
+                }
+            }
+
+            // ── Проверка баланса ─────────────────────────────────────────
+            async function checkBalance(provider) {
+                if (!provider || !provider.publicKey) return;
+                setBalanceText('...');
+                const endpoints = [
+                    'https://api.mainnet-beta.solana.com',
+                    'https://solana-api.projectserum.com',
+                    'https://rpc.ankr.com/solana',
+                    solanaWeb3.clusterApiUrl('mainnet-beta')
+                ];
+                for (const endpoint of endpoints) {
+                    try {
+                        const conn = new solanaWeb3.Connection(endpoint, { commitment: 'confirmed', timeout: 30000 });
+                        const lamports = await conn.getBalance(provider.publicKey);
+                        const sol = (lamports / solanaWeb3.LAMPORTS_PER_SOL).toFixed(4);
+                        localStorage.setItem('phantomBalance', sol);
+                        setBalanceText(sol);
+                        return;
+                    } catch (e) {
+                        console.warn('Balance endpoint failed:', endpoint);
+                    }
+                }
+                setBalanceText('—');
+            }
+
+            // ── Подключение ──────────────────────────────────────────────
+            async function connectWallet() {
+                const provider = getProvider();
+                if (!provider) {
+                    if (confirm('Phantom wallet not detected. Install it?')) {
+                        window.open('https://phantom.app/download', '_blank');
+                    }
+                    return;
+                }
+                try {
+                    [navConnectBtn, footerConnectBtn, mobileWalletBtn].forEach(function (btn) {
+                        if (btn) btn.textContent = 'Connecting...';
+                    });
+                    localStorage.removeItem('wallet_logout');
+                    const resp = await provider.connect();
+                    if (!resp || !resp.publicKey) throw new Error('No publicKey returned');
+                    userAddress = resp.publicKey.toString();
+                    localStorage.setItem('phantom_public_key', userAddress);
+                    localStorage.setItem('phantomPublicKey', userAddress);
+                    updateUI(userAddress);
+                    await checkBalance(provider);
+
+                    if (provider.on) {
+                        provider.on('disconnect', disconnectWallet);
+                        provider.on('accountChanged', function (pk) {
+                            if (pk) {
+                                userAddress = pk.toString();
+                                localStorage.setItem('phantom_public_key', userAddress);
+                                localStorage.setItem('phantomPublicKey', userAddress);
+                                updateUI(userAddress);
+                                checkBalance(provider);
+                            } else {
+                                disconnectWallet();
+                            }
+                        });
+                    }
+                } catch (err) {
+                    if (!err.message?.includes('User rejected')) {
+                        console.error('Connect error:', err);
+                    }
+                    updateUI(userAddress);
+                }
+            }
+
+            // ── Отключение ───────────────────────────────────────────────
+            async function disconnectWallet() {
+                const provider = getProvider();
+                try {
+                    if (provider && typeof provider.disconnect === 'function') {
+                        await provider.disconnect();
+                    }
+                } catch (e) {
+                    console.warn('Disconnect error:', e);
+                }
+                localStorage.setItem('wallet_logout', '1');
+                userAddress = null;
+                localStorage.removeItem('phantom_public_key');
+                localStorage.removeItem('phantomPublicKey');
+                localStorage.removeItem('phantomBalance');
+                updateUI(null);
+            }
+
+            // ── Восстановление сессии ────────────────────────────────────
+            async function restoreWallet() {
+                if (localStorage.getItem('wallet_logout')) return;
+                const provider = getProvider();
+                if (provider) {
+                    try {
+                        const resp = await provider.connect({ onlyIfTrusted: true });
+                        if (resp?.publicKey) {
+                            userAddress = resp.publicKey.toString();
+                            localStorage.setItem('phantom_public_key', userAddress);
+                            localStorage.setItem('phantomPublicKey', userAddress);
+                            updateUI(userAddress);
+                            const savedBal = localStorage.getItem('phantomBalance');
+                            if (savedBal) setBalanceText(savedBal);
+                            await checkBalance(provider);
+                            return;
+                        }
+                    } catch (e) { /* нет активной сессии */ }
+                }
+                const saved = localStorage.getItem('phantom_public_key')
+                           || localStorage.getItem('phantomPublicKey');
+                if (saved && /^[A-HJ-NP-Za-km-z1-9]{32,44}$/.test(saved)) {
+                    userAddress = saved;
+                    updateUI(userAddress);
+                    const savedBal = localStorage.getItem('phantomBalance');
+                    if (savedBal) setBalanceText(savedBal);
+                }
+            }
+
+            // ── Обработчики кнопок Connect ───────────────────────────────
+            // Если уже подключён — toggle меню; если нет — подключаемся
+            function handleConnectClick(menuEl, e) {
+                if (userAddress) {
+                    if (menuEl) {
+                        // Закрываем другое меню, открываем это
+                        [walletMenuNav, walletMenuFooter].forEach(function (m) {
+                            if (m && m !== menuEl) m.classList.remove('open');
+                        });
+                        menuEl.classList.toggle('open');
+                        e.stopPropagation();
+                    }
+                } else {
+                    connectWallet();
+                }
+            }
+
+            if (navConnectBtn) {
+                navConnectBtn.addEventListener('click', function (e) {
+                    handleConnectClick(walletMenuNav, e);
+                });
+            }
+            if (footerConnectBtn) {
+                footerConnectBtn.addEventListener('click', function (e) {
+                    handleConnectClick(walletMenuFooter, e);
+                });
+            }
+            if (mobileWalletBtn) {
+                mobileWalletBtn.addEventListener('click', function () {
+                    if (userAddress) {
+                        // На мобиле показываем nav-меню или просто открываем его
+                        if (walletMenuNav) walletMenuNav.classList.toggle('open');
+                    } else {
+                        connectWallet();
+                    }
+                });
+            }
+
+            // ── Logout ───────────────────────────────────────────────────
+            if (logoutBtn)       logoutBtn.addEventListener('click', disconnectWallet);
+            if (logoutBtnFooter) logoutBtnFooter.addEventListener('click', disconnectWallet);
+
+            // ── Закрытие меню при клике снаружи ─────────────────────────
+            document.addEventListener('click', function (e) {
+                const clickedNav    = navConnectBtn    && (navConnectBtn.contains(e.target)    || (walletMenuNav    && walletMenuNav.contains(e.target)));
+                const clickedFooter = footerConnectBtn && (footerConnectBtn.contains(e.target) || (walletMenuFooter && walletMenuFooter.contains(e.target)));
+                if (!clickedNav && !clickedFooter) {
+                    closeMenus();
+                }
+            });
+
+            // ── Запускаем восстановление ─────────────────────────────────
+            restoreWallet();
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const createTokenBtns = document.querySelectorAll('.create-token-btn');
+            
+            // Добавляем обработчик события для всех кнопок Create Token
+            createTokenBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Просто перенаправляем на страницу создания токена
+                    window.location.href = '../create-token.html';
+                });
+            });
+        });
+    </script>
+
+    <script>
+        // Live Activity Generator
+        document.addEventListener('DOMContentLoaded', () => {
+            const activityList = document.getElementById('activityList');
+            let currentMinutes = 5; // Start from 5 minutes
+            
+            // Unique random token names (not similar to real ones)
+            const tokenNames = [
+                'ZXNRO', 'KYLRA', 'VEXON', 'QIPRO', 'NEXIA', 'ZYKOR', 'PLIXO', 'TRIXA',
+                'VOREX', 'JYNEX', 'MIXLY', 'BLAZE', 'XYLON', 'KRYNN', 'FYLOX', 'WYNZO',
+                'RYNEX', 'LUXIO', 'DYNEX', 'VYNOR', 'QLIXO', 'PIXRA', 'NEXOR', 'ZYNIX',
+                'VYLOX', 'KRIXO', 'JYLIX', 'TRYNX', 'FYLAX', 'MYNIX', 'ZYLRA', 'BRYXO',
+                'LYNOX', 'TRYXA', 'SYNIX', 'RYLOX', 'NYLAX', 'XYRON', 'CYLOX', 'DRYXO',
+                'FLYXA', 'GRYNO', 'HYLOX', 'WYLAX', 'PYLOX', 'SKYRO', 'THYNX', 'ULYXO'
+            ];
+            
+            // Random actions
+            const actions = [
+                { icon: '🚀', text: 'Token created', type: 'created' },
+                { icon: '💎', text: 'Liquidity added', type: 'liquidity' },
+                { icon: '✅', text: 'Mint revoked', type: 'revoked' },
+                { icon: '📈', text: 'Trading started', type: 'trading' }
+            ];
+            
+            // Generate random wallet address
+            function generateWalletAddress() {
+                const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz123456789';
+                let address = '';
+                for (let i = 0; i < 6; i++) {
+                    address += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return address;
+            }
+            
+            // Get time in descending order (5 min, 4 min, 3 min, 2 min, 1 min, just now)
+            function getTimeAgo() {
+                let timeText;
+                if (currentMinutes === 0) {
+                    timeText = 'just now';
+                } else if (currentMinutes === 1) {
+                    timeText = '1 min ago';
+                } else {
+                    timeText = `${currentMinutes} min ago`;
+                }
+                
+                // Decrease minutes for next item
+                currentMinutes--;
+                if (currentMinutes < 0) {
+                    currentMinutes = 5; // Reset to 5 when reaching 0
+                }
+                
+                return timeText;
+            }
+            
+            // Create activity item
+            function createActivityItem() {
+                const action = actions[Math.floor(Math.random() * actions.length)];
+                const tokenName = tokenNames[Math.floor(Math.random() * tokenNames.length)];
+                const wallet = generateWalletAddress();
+                const timeAgo = getTimeAgo();
+                
+                const item = document.createElement('div');
+                item.className = 'activity-item';
+                item.innerHTML = `
+                    <div class="activity-icon-type">${action.icon}</div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <span class="activity-token">$${tokenName}</span> ${action.text}
+                        </div>
+                        <div class="activity-time">${wallet}... • ${timeAgo}</div>
+                    </div>
+                `;
+                
+                return item;
+            }
+            
+            // Add activity item to list
+            function addActivityItem() {
+                const item = createActivityItem();
+                
+                // Add new item at the top
+                if (activityList.firstChild) {
+                    activityList.insertBefore(item, activityList.firstChild);
+                } else {
+                    activityList.appendChild(item);
+                }
+                
+                // Keep only last 3 items
+                while (activityList.children.length > 3) {
+                    activityList.removeChild(activityList.lastChild);
+                }
+            }
+            
+            // Initialize with 3 items
+            for (let i = 0; i < 3; i++) {
+                addActivityItem();
+            }
+            
+            // Update activity every 15 seconds
+            setInterval(() => {
+                addActivityItem();
+            }, 15000); // 15 seconds
+        });
+    </script>
+
+    <!-- Hamburger Menu Script -->
+    <script>
+        (function() {
+            var btn = document.getElementById('hamburgerBtn');
+            var drawer = document.getElementById('mobileNavDrawer');
+            var overlay = document.getElementById('mobileNavOverlay');
+            var closeBtn = document.getElementById('mobileNavClose');
+            var mobileWalletBtn = document.getElementById('mobileWalletBtn');
+
+            function openMenu() {
+                btn.classList.add('open');
+                drawer.classList.add('open');
+                overlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                btn.classList.remove('open');
+                drawer.classList.remove('open');
+                overlay.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            btn.addEventListener('click', function() {
+                drawer.classList.contains('open') ? closeMenu() : openMenu();
+            });
+            closeBtn.addEventListener('click', closeMenu);
+            overlay.addEventListener('click', closeMenu);
+
+            // Закрывать при нажатии Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeMenu();
+            });
+
+            if (mobileWalletBtn) {
+                mobileWalletBtn.addEventListener('click', function() {
+                    closeMenu();
+                    var walletBtn = document.querySelector('.nav-container .connect-wallet-btn');
+                    if (walletBtn) walletBtn.click();
+                });
+            }
+        })();
+    </script>
+
+<!--Start of Live Chat-->
+<script type="text/javascript">
+	var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+	(function(){
+	var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+	s1.async=true;
+	s1.src='https://embed.tawk.to/6919e396cf64c1195d2e94b0/1ja6i214o';
+	s1.charset='UTF-8';
+	s1.setAttribute('crossorigin','*');
+	s0.parentNode.insertBefore(s1,s0);
+	})();
+	</script>
+<!--End of Live Chat-->
+    
+
+</body>
+
+</html>
